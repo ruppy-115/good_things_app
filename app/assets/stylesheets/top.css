@@ -1,0 +1,21 @@
+.top_wrapper {
+  background-color: blanchedalmond;
+  height: calc(100vh);
+  position: relative;
+  background-position: center;
+}
+
+.top_inner {
+  width: 100%;
+}
+
+.top_title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: brown;
+}
