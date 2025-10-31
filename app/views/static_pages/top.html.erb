@@ -1,5 +1,24 @@
 <div class="top_wrapper">
   <div class="top_inner">
-    <h1 class="top_title">今日あった良いことを<br>まとめるアプリ</h1>
+    <%= image_tag "present.png", class: "img-corner img-tl", alt: "" %>
+    <%= image_tag "alcohol.png", class: "img-corner img-tr", alt: "人の写真" %>
+    <%= image_tag "ice.png", class: "img-corner img-bl", alt: "ソフトクリームの写真" %>
+    <%= image_tag "dog.png", class: "img-corner img-br", alt: "" %>
+    <div class="top_content">
+      <h1 class="top_title">Good Things</h1>
+      <p class="top_text">今日の良いことを<br>記録するアプリ</p>
+      <p class="top_sub-text">1日の終わりに"良いこと"を<br>振り返りませんか？<br>いつもと同じ1日が<br>きっと特別な日になるでしょう。</p>
+      <div class="top_btn">
+        <div class="m_btn_wrapper">
+          <%= link_to login_path, class: "m_btn" do %>
+            <span class="m_btn-txt">ログイン</span>
+          <% end %>
+        </div>
+        <div class="m_btn_wrapper btn_color">
+          <%= link_to new_user_path, class: "m_btn" do %>
+            <span class="m_btn-txt">新規登録</span>
+          <% end %>
+        </div>
+    </div>
   </div>
 </div>

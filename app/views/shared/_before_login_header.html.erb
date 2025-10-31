@@ -1,20 +1,26 @@
-<header>
-  <nav class="navbar navbar-expand-lg navigation navbar-light bg-light">
+<header class="header">
+  <div class="header__inner">
+    <h1 class="header__title header-title">
+      <%= link_to root_path do %>
+        GoodThings
+      <% end %>
+    </h1>
 
-    <%= link_to root_path, class: "navbar-brand" do %>
-      <p>GoodThings</p>
-    <% end %>
-
-    <button class='navbar-toggler' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto main-nav align-items-center">
-        <li class="nav-item">
-          <%= link_to 'ログイン', login_path, class: "nav-link" %>
+    <nav class="header__nav nav" id="js-nav">
+      <ul class="nav__items nav-items">
+        <li class="nav-items__item">
+          <%= link_to login_path do %>ログイン<% end %>
+        </li>
+        <li class="nav-items__item">
+          <%= link_to new_user_path do %>新規登録<% end %>
         </li>
       </ul>
-    </div>
-  </nav>
+    </nav>
+
+    <button class="header__hamburger hamburger" id="js-hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </header>
