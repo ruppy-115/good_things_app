@@ -1,39 +1,35 @@
-<header>
-  <nav class='navbar navbar-expand-lg navigation navbar-light bg-light'>
-    <%= link_to '/', class: 'navbar-brand' do %>
-      GoodThings
-    <% end %>
-    <button class='navbar-toggler' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent'
-      aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
-      <span class='navbar-toggler-icon'></span>
-    </button>
+<header class="header">
+  <div class="header__inner">
+    <h1 class="header__title header-title">
+      <%= link_to root_path do %>
+        GoodThings
+      <% end %>
+    </h1>
 
-    <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-      <ul class='navbar-nav ms-auto main-nav align-items-center'>
-        <li class='nav-item dropdown dropdown-slide'>
-          <%= link_to '掲示板', '#', class: 'nav-link dropdown-toggle', data: { bs_toggle: 'dropdown' }, aria: { haspopup: 'true', expanded: 'false' }, id: 'header-board-menu' %>
-          <div class='dropdown-menu dropdown-menu-end'>
-            <%= link_to '掲示板一覧', '#', class: 'dropdown-item' %>
-            <%= link_to '掲示板作成', '#', class: 'dropdown-item' %>
-          </div>
+    <nav class="header__nav nav" id="js-nav">
+      <ul class="nav__items nav-items">
+        <li class="nav-items__item">
+          <%= link_to posts_path do %>投稿一覧<% end %>
         </li>
-
-        <li class='nav-item'>
-          <%= link_to 'ブックマーク一覧', '#', class: 'nav-link' %>
+        <li class="nav-items__item">
+          <%= link_to "#" do %>投稿作成<% end %>
         </li>
-
-        <li class='nav-item dropdown dropdown-slide'>
-          <%= link_to '#', class: 'nav-link', data: { bs_toggle: 'dropdown' }, aria: { haspopup: 'true', expanded: 'false' }, id: 'header-profile' do %>
-            <%= image_tag 'sample.jpg', class: 'rounded-circle mr15', width: '40', height: '40' %>
-          <% end %>
-          <div class='dropdown-menu dropdown-menu-end'>
-            <div class='dropdown-item'>らんてっく たろう</div>
-            <div class='dropdown-divider'></div>
-            <%= link_to 'プロフィール', '#', class: 'dropdown-item' %>
-            <%= link_to 'ログアウト', '#', class: 'dropdown-item', data: { turbo_method: :delete } %>
-          </div>
+        <li class="nav-items__item">
+          <%= link_to "#" do %>プロフィール<% end %>
+        </li>
+        <li class="nav-items__item">
+          <%= button_to "ログアウト", logout_path, 
+                method: :delete, 
+                class: "btn",
+                data: { turbo: false } %>
         </li>
       </ul>
-    </div>
-  </nav>
+    </nav>
+
+    <button class="header__hamburger hamburger" id="js-hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </header>
