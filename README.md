@@ -91,3 +91,6 @@
 - kaminari(ページネーション)
 - whenever(Rakeタスクの定期実行管理)
 - Rakeタスク(未投稿ユーザーへのリマインドメール送信処理)
+
+## 画面遷移図
+https://www.figma.com/design/eSZxKSqKt5PD2UFSXrvxzf/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C?node-id=0-1&t=To39WQvxyi0VdPsx-1
