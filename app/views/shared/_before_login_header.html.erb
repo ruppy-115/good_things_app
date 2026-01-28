@@ -1,26 +1,18 @@
 <header class="header">
-  <div class="header__inner">
-    <h1 class="header__title header-title">
-      <%= link_to root_path do %>
-        GoodThings
-      <% end %>
-    </h1>
+  <p class="header-logo">
+    <%= link_to root_path, class: "header-logo_link" do %>
+      GoodThings
+    <% end %>
+  </p>
 
-    <nav class="header__nav nav" id="js-nav">
-      <ul class="nav__items nav-items">
-        <li class="nav-items__item">
-          <%= link_to login_path do %>ログイン<% end %>
-        </li>
-        <li class="nav-items__item">
-          <%= link_to new_user_path do %>新規登録<% end %>
-        </li>
-      </ul>
-    </nav>
-
-    <button class="header__hamburger hamburger" id="js-hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
+  <nav class="header-nav">
+    <ul class="header-nav_list">
+      <li class="header-nav_item">
+        <%= link_to new_user_path, class: "header-nav_link" do %>新規登録<% end %>
+      </li>
+      <li class="header-nav_item">
+        <%= link_to login_path, class: "header-nav_link" do %>ログイン<% end %>
+      </li>
+    </ul>
+  </nav>
 </header>
