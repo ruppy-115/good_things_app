@@ -1,3 +1,8 @@
+html,
+body {
+  overflow-x: hidden;
+}
+
 .top_wrapper {
   min-height: calc(100vh - 80px); 
   width: 100%;
@@ -15,6 +20,12 @@
   font-size: 70px;
   font-weight: bold;
   color: #008db7;
+}
+
+@media screen and (min-width: 960px) {
+  .u-mobile-br {
+    display: none;
+  }
 }
 
 .top_text {
