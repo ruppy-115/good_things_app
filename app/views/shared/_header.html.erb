@@ -14,7 +14,7 @@
         <%= link_to "#", class: "header-nav_link" do %>マイページ<% end %>
       </li>
       <li class="header-nav_item">
-        <%= link_to "#", class: "header-nav_link" do %>記録作成<% end %>
+        <%= link_to new_post_path, class: "header-nav_link" do %>記録作成<% end %>
       </li>
       <li class="header-nav_item">
         <%= button_to logout_path, method: :delete, class: "header-nav_link bg-transparent border-none p-0 cursor-pointer" do %>
