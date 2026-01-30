@@ -50,6 +50,8 @@ body.is-fixed {
   height: 100%;
   color: #fff;
   text-decoration: none;
+  white-space: nowrap; /* これで一行に強制されます */
+  display: block;      /* 念のため追加 */
 }
 
 /* ヘッダーのナビ部分 */
@@ -64,7 +66,7 @@ body.is-fixed {
   transform: translateX(100%);
   background-color: rgba(0, 141, 183, 0.95);
   transition: ease .4s;
-
+  z-index: 9998;
   display: flex;
 }
 
