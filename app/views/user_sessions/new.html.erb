@@ -14,10 +14,9 @@
           <%= f.password_field :password, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" %>
         </div>
 
-        <%= f.submit "ログイン", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer" %>
-      <% end %>
+        <%= f.submit "ログイン", class: "!no-underline w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#008db7] hover:bg-[#00769a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer transition duration-150" %>
 
-      <div class="mt-8 text-center flex flex-col space-y-2">
+      <div class="my-8 text-center flex flex-col space-y-2">
         <%= link_to '新規登録はこちら', new_user_path, class: "text-blue-600 hover:underline text-sm" %>
     </div>
   </div>
