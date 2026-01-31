@@ -21,5 +21,5 @@ Rails.application.routes.draw do
   resources :posts, only: %i[index new create]
   resources :my_posts, only: %i[index]
 
-  get 'users', to: 'users#new'
+  get "users", to: "users#new"
 end
