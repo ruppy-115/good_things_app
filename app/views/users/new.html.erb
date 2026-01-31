@@ -6,8 +6,14 @@
       <% if @user.errors.any? %>
         <div class="bg-red-50 border-l-4 border-red-400 p-2 mb-4">
           <ul class="mt-2 ml-4 list-disc text-sm text-red-600">
-            <% @user.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
+            <% @user.errors.each do |error| %>
+              <li>
+                <% if error.attribute == :email && error.type == :taken %>
+                  <%= error.message %>
+                <% else %>
+                  <%= error.full_message %>
+                <% end %>
+              </li>
             <% end %>
           </ul>
         </div>

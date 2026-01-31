@@ -8,3 +8,9 @@ ja:
         email: "メールアドレス"
         password: "パスワード"
         password_confirmation: "パスワード（確認用）"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "こちらのメールアドレスは登録できません"
