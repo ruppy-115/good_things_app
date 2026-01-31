@@ -9,7 +9,7 @@ class UserSessionsController < ApplicationController
     if @user
       redirect_to new_post_path, success: "ログインしました"
     else
-      flash.now[:danger] = "ログインに失敗しました"
+      flash.now[:danger] = "メールアドレスかパスワードが間違っています"
       render :new, status: :unprocessable_entity
     end
   end
