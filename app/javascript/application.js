@@ -2,5 +2,3 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 import "./hamburger.js"
-// eslint-disable-next-line no-unused-vars
-import * as bootstrap from "bootstrap"
