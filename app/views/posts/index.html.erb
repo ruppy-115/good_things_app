@@ -1,92 +1,87 @@
-<div class="min-h-screen bg-[#FDFBF7] pb-24">
-  
-  <%# --- ヘッダーエリア --- %>
-  <div class="bg-[#AED7BE] pt-4 shadow-sm z-10 relative">
-    <div class="flex justify-center items-center mb-4">
-      <div class="flex items-center space-x-2">
-        <span class="text-gray-700 font-bold text-lg">プラス日記</span>
-      </div>
-    </div>
+<%# 余白調整: 固定ヘッダー+カレンダーの分(約200px)を確保するため pt-52 に変更 %>
+<div class="min-h-screen bg-[#FDFBF7] pt-41 pb-20">
 
-    <%# --- タブ切り替え --- %>
-    <div class="flex justify-center w-full px-4">
-      <div class="relative w-full max-w-md flex justify-between text-sm font-bold text-gray-700">
-        
-        <% active_class = "border-b-4 border-[#FDFBF7]" %>
-        <% inactive_class = "text-gray-500 hover:text-gray-700" %>
-        
-        <%# ★修正1: data: { turbo_frame: "main-interface" } を追加して、画面遷移なしにする %>
-        <%= link_to "世界の良いこと", posts_path(filter: 'public', date: @current_date), 
-            class: "flex-1 text-center pb-2 cursor-pointer transition-colors duration-200 #{params[:filter] != 'friends' ? active_class : inactive_class}",
-            data: { turbo_frame: "main-interface" } %>
-
-        <%= link_to "フレンドの良いこと", posts_path(filter: 'friends', date: @current_date), 
-            class: "flex-1 text-center pb-2 cursor-pointer transition-colors duration-200 #{params[:filter] == 'friends' ? active_class : inactive_class}",
-            data: { turbo_frame: "main-interface" } %>
-            
-      </div>
-    </div>
-  </div>
-
-  <%# --- メインインターフェース（Turbo Frame） --- %>
-  <%= turbo_frame_tag "main-interface" do %>
+  <%# ★修正1: Turbo Frame を一番外側に移動（ヘッダーもカレンダーも更新対象にするため） %>
+  <%= turbo_frame_tag "main-interface", data: { turbo_action: "advance" } do %>
     
-    <%# ★修正2: カレンダーもノートも全部包む div に data-controller を移動！ %>
-    <%# これでカレンダーのクリックもこのコントローラーで検知できるようになります %>
+    <%# ページ全体をフリップ用コントローラーで包む %>
     <div class="w-full" data-controller="notebook-flip">
 
-      <%# --- カレンダーエリア --- %>
-      <div class="bg-[#F2F0E9] py-3 shadow-inner">
-        <div class="flex items-center justify-center space-x-1 px-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-          
-          <%# 前の週へ %>
-          <%= link_to posts_path(date: @start_date - 1.week, filter: @filter), class: "text-gray-400 hover:text-gray-600 px-2" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          <% end %>
+      <%# ---------------------------------------------------------------- %>
+      <%# ★修正2: ヘッダーとカレンダーをひとつの fixed コンテナにまとめる %>
+      <%# ---------------------------------------------------------------- %>
+      <div class="fixed top-0 left-0 w-full z-[10000] bg-[#FDFBF7] shadow-md">
+        
+        <%# --- A. タイトルエリア (背景色あり) --- %>
+        <div class="bg-[#AED7BE] pt-4">
+          <div class="flex justify-center items-center mb-2">
+            <span class="text-gray-700 font-bold text-lg">プラス日記</span>
+          </div>
 
-          <%# 日付ループ %>
-          <% (@start_date..@start_date + 6.days).each do |day| %>
-            <% is_active = day == @current_date %>
-            
-            <%# 日付ボタン（actionが正しく動くようになります） %>
-            <%= link_to posts_path(date: day, filter: @filter), 
-                class: "flex flex-col items-center justify-center w-10 h-14 rounded-full flex-shrink-0 cursor-pointer transition-all duration-200 #{is_active ? 'text-[#AED7BE]' : 'text-gray-600 hover:bg-gray-100'}",
-                data: { action: "click->notebook-flip#flip",
-                        turbo_frame: "main-interface",
-                        turbo_action: "advance" } do %>
-                
-              <span class="text-xs font-bold mb-1"><%= %w(日 月 火 水 木 金 土)[day.wday] %></span>
-              <span class="text-lg font-bold <%= is_active ? 'scale-125' : '' %>"><%= day.day %></span>
+          <%# --- B. タブ切り替え --- %>
+          <div class="flex justify-center w-full px-4">
+            <div class="relative w-full max-w-md flex justify-between text-sm font-bold text-gray-700">
+              <% active_class = "border-b-4 border-[#FDFBF7]" %>
+              <% inactive_class = "text-gray-500 hover:text-gray-700" %>
               
-              <% if is_active %>
-                <div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[8px] border-b-[#AED7BE] mt-1"></div>
-              <% else %>
-                <div class="h-[9px] w-1"></div>
+              <%= link_to "世界の良いこと", posts_path(filter: 'public', date: @current_date), 
+                  class: "flex-1 text-center pb-2 cursor-pointer transition-colors duration-200 #{params[:filter] != 'friends' ? active_class : inactive_class}" %>
+
+              <%= link_to "フレンドの良いこと", posts_path(filter: 'friends', date: @current_date), 
+                  class: "flex-1 text-center pb-2 cursor-pointer transition-colors duration-200 #{params[:filter] == 'friends' ? active_class : inactive_class}" %>
+            </div>
+          </div>
+        </div>
+
+        <%# --- C. カレンダーエリア (ヘッダーの下に結合) --- %>
+        <div class="bg-[#F2F0E9] pt-2 pb-0 border-b border-gray-200">
+          <div class="flex items-center justify-center space-x-1 px-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+            
+            <%# 前の週へ %>
+            <%= link_to posts_path(date: @start_date - 1.week, filter: @filter), class: "text-gray-400 hover:text-gray-600 px-2 py-2" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            <% end %>
+
+            <%# 日付ループ %>
+            <% (@start_date..@start_date + 6.days).each do |day| %>
+              <% is_active = day == @current_date %>
+              <%= link_to posts_path(date: day, filter: @filter), 
+                  class: "flex flex-col items-center justify-center w-10 h-14 rounded-full flex-shrink-0 cursor-pointer transition-all duration-200 #{is_active ? 'text-[#AED7BE]' : 'text-gray-600 hover:bg-gray-100'}",
+                  data: { action: "click->notebook-flip#flip" } do %>
+                  
+                <span class="text-xs font-bold mb-1"><%= %w(日 月 火 水 木 金 土)[day.wday] %></span>
+                <span class="text-lg font-bold <%= is_active ? 'scale-125' : '' %>"><%= day.day %></span>
+                
+                <% if is_active %>
+                  <div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[8px] border-b-[#AED7BE] mt-1"></div>
+                <% else %>
+                  <div class="h-[9px] w-1"></div>
+                <% end %>
               <% end %>
             <% end %>
-          <% end %>
 
-          <%# 次の週へ %>
-          <%= link_to posts_path(date: @start_date + 1.week, filter: @filter), class: "text-gray-400 hover:text-gray-600 px-2" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          <% end %>
+            <%# 次の週へ %>
+            <%= link_to posts_path(date: @start_date + 1.week, filter: @filter), class: "text-gray-400 hover:text-gray-600 px-2 py-2" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            <% end %>
+          </div>
         </div>
       </div>
+      <%# --- fixedエリア終了 --- %>
 
       <%# --- ノートエリア --- %>
-      <div class="px-2 mt-4 max-w-lg mx-auto relative perspective-1000">
-        
-        <%# ノート本体（IDは notebook-page のまま） %>
-        <div id="notebook-page" class="bg-white rounded-r-lg shadow-lg min-h-[600px] flex relative notebook-grid notebook-page-transition">
+      <%# 上部は pt-52 で確保済みなので、ここでは余計なマージンを入れない %>
+      <div class="px-2 max-w-lg mx-auto relative perspective-1000">
+        <div id="notebook-page" class="bg-white rounded-r-lg shadow-lg min-h-[428px] flex relative notebook-grid notebook-page-transition">
           
           <%# リング部分 %>
           <div class="w-12 flex-shrink-0 relative border-r border-gray-200">
             <div class="flex flex-col items-center space-y-6 pt-8 h-full">
-              <% 10.times do %>
+              <% 9.times do %>
                 <div class="relative w-full flex justify-center">
                   <div class="w-4 h-4 bg-gray-300 rounded-full shadow-inner"></div>
                   <div class="absolute -left-3 top-1 w-8 h-2 bg-gray-400 rounded-full border border-gray-500 transform -rotate-12 shadow-md z-10"></div>
@@ -108,18 +103,18 @@
               </div>
             <% end %>
           </div>
-
-          <%# 新規作成ボタン %>
-          <%= link_to new_post_path, class: "absolute bottom-6 right-6 w-16 h-16 bg-[#F2ECD9] rounded-full border-2 border-gray-700 flex items-center justify-center shadow-lg hover:bg-[#e6dfc5] transition active:scale-95 z-20", data: { turbo_frame: "_top" } do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-          <% end %>
-
         </div>
       </div>
-    
-    </div> <%# --- div data-controller End --- %>
-  <% end %> <%# --- Turbo Frame End --- %>
 
+      <%# --- 書くボタン (Frame内に入れて日付情報を保持させる) --- %>
+      <%= link_to new_post_path, 
+        class: "fixed bottom-20 right-6 w-16 h-16 bg-[#F2ECD9] rounded-full border-2 border-gray-700 flex items-center justify-center shadow-lg hover:bg-[#e6dfc5] transition active:scale-95 z-[10001]", 
+        data: { turbo_frame: "_top" } do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      <% end %>
+
+    </div>
+  <% end %> <%# --- Turbo Frame End --- %>
 </div>
