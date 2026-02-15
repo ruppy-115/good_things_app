@@ -1,21 +1,129 @@
-<div class="container mx-auto px-4">
-  <div class="flex justify-center">
-    <div class="w-full max-w-2xl mt-16">
-      <h1 class="text-3xl font-bold mb-8 text-center">今日の記録作成</h1>
+<%# --- ページ全体のレイアウト --- %>
+<div class="min-h-screen bg-[#FDFBF7] pt-20 pb-16">
+
+  <%# --- 1. ヘッダー --- %>
+  <div class="fixed top-0 left-0 w-full h-16 bg-[#AED7BE] z-[10000] flex items-center px-4 shadow-sm">
+    <%# ★修正: text-lg を text-sm に変更 %>
+    <%= link_to posts_path, class: "flex items-center text-gray-600 font-bold text-sm hover:opacity-70 transition" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      世界の良いこと
+    <% end %>
+  </div>
+
+  <%# --- 2. ノート風コンテナ --- %>
+  <div class="max-w-lg mx-auto px-2 relative perspective-1000">
+    <div class="bg-white rounded-r-lg shadow-lg min-h-[510px] flex relative notebook-grid">
       
-      <%= form_with model: @post, url: posts_path, method: :post, local: true, data: { turbo: false }, class: "space-y-6" do |f| %>
-        <%# 投稿内容 %>
-        <div>
-          <%= f.label :body, "本文", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.text_area :body, rows: "10", class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" %>
+      <%# --- A. リング部分 --- %>
+      <div class="w-12 flex-shrink-0 relative border-r border-gray-200">
+        <div class="flex flex-col items-center space-y-6 pt-8 h-full">
+          <% 11.times do %>
+            <div class="relative w-full flex justify-center">
+              <div class="w-4 h-4 bg-gray-300 rounded-full shadow-inner"></div>
+              <div class="absolute -left-3 top-1 w-8 h-2 bg-gray-400 rounded-full border border-gray-500 transform -rotate-12 shadow-md z-10"></div>
+            </div>
+          <% end %>
         </div>
+      </div>
 
-        <%# 投稿ボタン %>
-        <%= f.submit "投稿", class: "!no-underline w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#008db7] hover:bg-[#00769a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer transition duration-150" %>
-      <% end %>
+      <%# --- B. 入力フォームエリア --- %>
+      <div class="flex-grow p-6 pt-5">
+        
+        <%= form_with model: @post, local: true, data: { turbo: false }, class: "h-full flex flex-col" do |f| %>
 
-      <div class="my-8 text-center">
-        <%= link_to 'みんなの記録を見る', posts_path, class: "text-blue-600 hover:underline text-sm" %>
+          <%# 1. 日付表示 %>
+          <div class="mb-6">
+            <%# ★修正: text-xl を text-base に変更（少し控えめに） %>
+            <span class="text-base font-bold font-sans tracking-wide text-black">
+              <%= Date.today.strftime('%Y.%m.%d') %>
+            </span>
+          </div>
+
+          <%# 2. 本文入力エリア %>
+          <div class="mb-6">
+            <%# ★修正: text-lg を text-sm に変更 %>
+            <%= f.text_area :body, 
+                class: "w-full h-30 bg-[#EEEEEE] rounded-xl border border-gray-300 p-4 text-gray-800 font-klee text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#AED7BE] resize-none shadow-inner",
+                placeholder: "今日はよく晴れていた。" %>
+          </div>
+
+          <%# 3. 今日の質問 %>
+          <% 
+            # 質問リストの定義
+            questions = [
+              "美味しかったごはんは\nありましたか？",
+              "誰かに「ありがとう」と\n感じたことはありましたか？",
+              "思わず感心したことは\nありましたか？",
+              "自分を褒めてあげたい\n小さな出来事はありましたか？",
+              "思わず笑顔になった瞬間は\nありましたか？",
+              "新しく知ったことや\n発見はありましたか？",
+              "一番リラックスできた\n時間はいつでしたか？",
+              "心が動かされた出来事は\nありましたか？",
+              "明日、楽しみにしていることは\nありますか？"
+            ]
+            # ランダムに1つ選ぶ
+            todays_question = questions.sample
+          %>
+
+          <div class="mb-8 bg-[#EBE4C4] p-3 rounded-md flex items-center shadow-sm">
+            <div class="flex-shrink-0 mr-3">
+              <div class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center">
+                <span class="text-gray-600 font-serif italic text-xs">?</span>
+              </div>
+            </div>
+            <%# ★修正: simple_format を使うと \n を <br> に変換して表示してくれます %>
+            <div class="text-sm text-gray-800 font-medium leading-tight">
+              <%= simple_format(todays_question, {}, wrapper_tag: "span") %>
+            </div>
+          </div>
+
+          <%# 4. 公開設定 %>
+          <div class="space-y-3 pl-1">
+            <%# --- 世界に公開 --- %>
+            <label class="flex items-center space-x-3 cursor-pointer group">
+              <%= f.radio_button :status, 'published', class: "peer sr-only", checked: true %>
+              <%# 
+                 仕組み:
+                 1. デフォルトは text-transparent (透明な文字＝見えない)
+                 2. チェックされたら(peer-checked) text-gray-900 (黒い文字＝見える) に変わる
+              %>
+              <div class="w-5 h-5 border-2 border-gray-600 bg-white flex items-center justify-center text-transparent peer-checked:text-gray-900 peer-checked:border-gray-600 transition-all">
+                <%# 絵文字の✔️だと緑色になることがあるので、記号の「✓」を太字で入れています %>
+                <span class="text-sm font-bold select-none">✓</span>
+              </div>
+              <span class="text-gray-800 font-medium text-sm">世界に公開</span>
+            </label>
+
+            <%# --- フレンドのみに公開 --- %>
+            <label class="flex items-center space-x-3 cursor-pointer group">
+              <%= f.radio_button :status, 'friends_only', class: "peer sr-only" %>
+              <div class="w-5 h-5 border-2 border-gray-600 bg-white flex items-center justify-center text-transparent peer-checked:text-gray-900 peer-checked:border-gray-600 transition-all">
+                <span class="text-sm font-bold select-none">✓</span>
+              </div>
+              <span class="text-gray-800 font-medium text-sm">フレンドのみに公開</span>
+            </label>
+
+            <%# --- 非公開 --- %>
+            <label class="flex items-center space-x-3 cursor-pointer group">
+              <%= f.radio_button :status, 'self_only', class: "peer sr-only" %>
+              <div class="w-5 h-5 border-2 border-gray-600 bg-white flex items-center justify-center text-transparent peer-checked:text-gray-900 peer-checked:border-gray-600 transition-all">
+                <span class="text-sm font-bold select-none">✓</span>
+              </div>
+              <span class="text-gray-800 font-medium text-sm">非公開</span>
+            </label>
+          </div>
+
+          <%# 5. 記録するボタン %>
+          <div class="mt-6 flex justify-center pb-2">
+            <%# ★修正: text-lg を text-sm に変更 %>
+            <%= f.button class: "bg-[#AED7BE] text-gray-700 font-bold text-sm py-3 w-48 rounded-full shadow-md hover:bg-[#9ccba0] transform active:scale-95 transition-all duration-200" do %>
+              記録する
+            <% end %>
+          </div>
+
+        <% end %>
       </div>
     </div>
   </div>

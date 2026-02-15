@@ -1,20 +1,7 @@
-<div class="w-full p-2 mb-4">
-  <div id="post-id-<%= post.id %>" class="h-full">
-    <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col">
-      
-      <%# --- 記事本文 --- %>
-      <div class="px-5 py-3 flex-grow">
-        <div class="flex items-start">
-          <p class="whitespace-pre-wrap text-gray-700 font-normal text-lg leading-relaxed"><%= post.body %></p>
-        </div>
-      </div>
-
-      <%# --- 日付 --- %>
-      <div class="px-5 py-3 bg-gray-50 border-t border-gray-100 rounded-b-lg">
-        <div class="flex items-center text-sm text-gray-500">
-          <%= post.created_at.strftime('%-m月%-d日 %H:%M') %>
-        </div>
-      </div>
-    </div>
+<div class="w-full">
+  <div class="bg-[#F0EFEC] border border-gray-300 rounded-xl px-4 py-4 shadow-sm relative">
+    <p class="font-klee text-gray-800 font-medium text-sm leading-relaxed tracking-wide text-center">
+      <%= post.body %>
+    </p>
   </div>
 </div>

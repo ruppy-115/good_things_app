@@ -1,0 +1,52 @@
+<footer class="l_footer">
+  <div class="l_footer_contents">
+    <div class="l_footer-nav">
+      <ul class="l_footer-nav_list">
+        <li class="l_footer-nav_item">
+          <%= link_to my_posts_path, class: "l_footer-nav_link" do %>
+            <div class="l_footer-icon-wrapper">
+              <%= image_tag "note.png",
+                alt: "自分の記録",
+                width: 622,
+                height: 622,
+                class: "m_service_item-icon" %>
+            </div>
+          <% end %>
+        </li>
+        <li class="l_footer-nav_item">
+          <%= link_to posts_path, class: "l_footer-nav_link" do %>
+            <div class="l_footer-icon-wrapper">
+              <%= image_tag "earth.png",
+                alt: "みんなの記録",
+                width: 770,
+                height: 770,
+                class: "m_service_item-icon" %>
+            </div>
+          <% end %>
+        </li>
+        <li class="l_footer-nav_item">
+          <%= link_to "#", class: "l_footer-nav_link" do %>
+            <div class="l_footer-icon-wrapper">
+              <%= image_tag "friend.png",
+                alt: "フレンド",
+                width: 517,
+                height: 517,
+                class: "m_service_item-icon" %>
+            </div>
+          <% end %>
+        </li>
+        <li class="l_footer-nav_item">
+          <%= link_to "#", class: "l_footer-nav_link" do %>
+            <div class="l_footer-icon-wrapper">
+              <%= image_tag "setting.png",
+                alt: "設定",
+                width: 491,
+                height: 491,
+                class: "m_service_item-icon" %>
+            </div>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
