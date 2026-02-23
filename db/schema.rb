@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_12_134502) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_23_142853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "friend_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "LEAST(user_id, friend_id), GREATEST(user_id, friend_id)", name: "index_friendships_on_unique_pairs", unique: true
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
 
   create_table "posts", force: :cascade do |t|
     t.string "body", null: false
@@ -31,9 +42,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_12_134502) do
     t.string "salt"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "friend_code"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["friend_code"], name: "index_users_on_friend_code", unique: true
     t.index ["name"], name: "index_users_on_name"
   end
 
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "posts", "users"
 end
