@@ -1,92 +1,136 @@
-<h1>フレンド管理</h1>
+<div class="min-h-screen bg-[#FDFBF7] pt-20 pb-16">
 
-<hr>
+  <%# --- 1. ヘッダー --- %>
+  <div class="fixed top-0 left-0 w-full h-16 bg-[#AED7BE] z-[10000] flex items-center px-4 shadow-sm">
+    <%# ★修正: text-lg を text-sm に変更 %>
+    <%= link_to posts_path, class: "flex items-center text-gray-600 font-bold text-sm hover:opacity-70 transition" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      世界の良いこと
+    <% end %>
+  </div>
 
-<div>
-  <h3>あなたのフレンドコード</h3>
-  <p><strong><%= current_user.friend_code %></strong></p>
-</div>
-
-<hr>
-
-<div>
-  <h3>フレンド検索</h3>
-  <%= form_with url: friendships_path, method: :get, local: true do |f| %>
-    <%= f.text_field :friend_code, placeholder: "フレンドコードを入力", value: params[:friend_code] %>
-    <%= f.submit "検索" %>
-  <% end %>
-
-  <% if @search_result.present? %>
-    <div style="margin-top: 10px; padding: 10px; border: 1px solid #ccc;">
-      <p><%= @search_result.name %> さんが見つかりました！</p>
+  <%# --- 2. ノート風コンテナ（中身のみ） --- %>
+  <div class="max-w-lg mx-auto px-2 relative perspective-1000">
+    <div class="bg-white rounded-r-lg shadow-lg min-h-[510px] flex relative notebook-grid text-gray-800">
       
-      <%= form_with url: friendships_path, method: :post, local: true do |f| %>
-        <%= f.hidden_field :friend_id, value: @search_result.id %>
-        <%= f.submit "フレンド申請する" %>
-      <% end %>
-    </div>
-  <% end %>
-</div>
-
-<hr>
-
-<div>
-  <h3>届いているフレンド申請</h3>
-  <% if @received_requests.any? %>
-    <ul>
-      <% @received_requests.each do |request| %>
-        <li>
-          <%= request.user.name %> さんから申請が届いています
-          
-          <%= button_to "承認する", friendship_path(request), method: :patch, style: "display:inline;" %>
-          <%= button_to "拒否する", friendship_path(request), method: :delete, data: { turbo_confirm: "本当に拒否しますか？" }, style: "display:inline;" %>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p>届いている申請はありません。</p>
-  <% end %>
-</div>
-
-<hr>
-
-<div>
-  <h3>送信済みのフレンド申請</h3>
-  <% if @sent_requests.any? %>
-    <ul>
-      <% @sent_requests.each do |request| %>
-        <li>
-          <%= request.friend.name %> さんへ申請中...
-          <%= button_to "申請をキャンセル", friendship_path(request), method: :delete, data: { turbo_confirm: "キャンセルしますか？" } %>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p>送信済みの申請はありません。</p>
-  <% end %>
-</div>
-
-<hr>
-
-<div>
-  <h3>フレンド一覧</h3>
-  <% if @friends.any? %>
-    <ul>
-      <% @friends.each do |friend| %>
-        <li>
-          <%= friend.name %>
-          
-          <% 
-            # 自分が申請した側か、相手が申請した側かを判定してFriendshipレコードを取得
-            friendship = current_user.active_friendships.find_by(friend_id: friend.id) || current_user.passive_friendships.find_by(user_id: friend.id) 
-          %>
-          <% if friendship %>
-            <%= button_to "フレンド解除", friendship_path(friendship), method: :delete, data: { turbo_confirm: "本当にフレンドを解除しますか？" } %>
+      <%# --- A. リング部分（投稿ページと全く同じ設定） --- %>
+      <div class="w-12 flex-shrink-0 relative border-r border-gray-200">
+        <div class="flex flex-col items-center space-y-6 pt-8 h-full">
+          <% 11.times do %>
+            <div class="relative w-full flex justify-center">
+              <div class="w-4 h-4 bg-gray-300 rounded-full shadow-inner"></div>
+              <div class="absolute -left-3 top-1 w-8 h-2 bg-gray-400 rounded-full border border-gray-500 transform -rotate-12 shadow-md z-10"></div>
+            </div>
           <% end %>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p>まだフレンドがいません。</p>
-  <% end %>
+        </div>
+      </div>
+
+      <%# --- B. フレンド管理エリア --- %>
+      <div class="flex-grow p-6 pt-8 pr-10"> <%# 全体の右余白を pr-10 に広げて調整 %>
+        
+        <h2 class="text-lg font-bold mb-4 tracking-widest">フレンド管理</h2>
+
+        <%# --- 1. 自分のフレンドコード（付箋風デザイン） --- %>
+        <div class="mb-6">
+          <%# w-full で親要素いっぱいに広げる %>
+          <div class="inline-flex relative bg-[#F6F0D1] shadow-sm w-full">
+            <div class="py-3 pl-4">
+              <p class="text-xs text-gray-700 mb-1">あなたのフレンドコード</p>
+              <p class="text-lg font-bold tracking-widest"><%= current_user.friend_code %></p>
+            </div>
+            <%# 付箋の右端の濃い部分（右側に固定） %>
+            <div class="w-5 bg-[#E1D6A4] absolute right-0 top-0 bottom-0"></div>
+          </div>
+        </div>
+
+        <%# --- 2. フレンド検索フォーム --- %>
+        <div class="mb-6 pl-1">
+          <h3 class="text-sm font-bold mb-2">・フレンド検索</h3>
+          
+          <%# w-full で横幅いっぱいにする（max-w を削除） %>
+          <%= form_with url: friendships_path, method: :get, local: true, class: "flex items-center w-full border border-gray-600 rounded-full overflow-hidden bg-[#F2F2F2]" do |f| %>
+            <%= f.text_field :friend_code, placeholder: "フレンドコードを入力", value: params[:friend_code], class: "flex-grow bg-transparent px-4 py-1.5 text-sm outline-none text-gray-700" %>
+            <%= f.submit "検索", class: "bg-[#EBE4C4] border-l border-gray-600 px-6 py-1.5 text-sm font-bold cursor-pointer hover:bg-[#dcd4b0] transition-colors whitespace-nowrap" %>
+          <% end %>
+
+          <%# 検索結果の表示（w-full に変更） %>
+          <% if @search_result.present? %>
+            <div class="mt-4 p-3 border border-gray-300 rounded-md bg-white flex justify-between items-center shadow-sm w-full">
+              <span class="text-sm font-bold"><%= @search_result.name %> さん</span>
+              <%= form_with url: friendships_path, method: :post, local: true do |f| %>
+                <%= f.hidden_field :friend_id, value: @search_result.id %>
+                <%= f.submit "フレンド申請", class: "bg-[#AED7BE] text-gray-700 text-xs px-3 py-1.5 rounded-full shadow hover:bg-[#9ccba0] transition-colors font-bold cursor-pointer" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <%# --- 3. 届いているフレンド申請 --- %>
+        <div class="mb-6 pl-1">
+          <h3 class="text-sm font-bold mb-2">・届いているフレンド申請</h3>
+          <% if @received_requests.any? %>
+            <ul class="space-y-3">
+              <% @received_requests.each do |request| %>
+                <li class="p-3 border border-gray-300 rounded-md bg-white flex justify-between items-center shadow-sm w-full">
+                  <%# アイコンを削除し、名前だけをシンプルに配置 %>
+                  <span class="text-sm font-bold"><%= request.user.name %> さん</span>
+                  
+                  <div class="flex space-x-2">
+                    <%= button_to "承認", friendship_path(request), method: :patch, class: "bg-[#AED7BE] text-gray-700 text-xs px-3 py-1.5 rounded-full shadow hover:bg-[#9ccba0] font-bold transition-colors cursor-pointer" %>
+                    <%= button_to "拒否", friendship_path(request), method: :delete, data: { turbo_confirm: "拒否しますか？" }, class: "bg-gray-300 text-gray-700 text-xs px-3 py-1.5 rounded-full shadow hover:bg-gray-400 font-bold transition-colors cursor-pointer" %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-sm text-gray-600 pl-4 tracking-wider">届いている申請はありません。</p>
+          <% end %>
+        </div>
+
+        <%# --- 4. 送信済みのフレンド申請 --- %>
+        <div class="mb-6 pl-1">
+          <h3 class="text-sm font-bold mb-2">・送信済みのフレンド申請</h3>
+          <% if @sent_requests.any? %>
+            <ul class="space-y-3">
+              <% @sent_requests.each do |request| %>
+                <li class="p-3 border border-gray-300 rounded-md bg-white flex justify-between items-center shadow-sm w-full">
+                  <%# アイコンを削除 %>
+                  <span class="text-sm font-bold"><%= request.friend.name %> さん</span>
+                  
+                  <%= button_to "キャンセル", friendship_path(request), method: :delete, data: { turbo_confirm: "申請をキャンセルしますか？" }, class: "text-gray-500 text-xs hover:underline cursor-pointer" %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-sm text-gray-600 pl-4 tracking-wider">送信済みの申請はありません。</p>
+          <% end %>
+        </div>
+
+        <%# --- 5. フレンド一覧 --- %>
+        <div class="mb-4 pl-1">
+          <h3 class="text-sm font-bold mb-2">・フレンド一覧</h3>
+          <% if @friends.any? %>
+            <ul class="space-y-3">
+              <% @friends.each do |friend| %>
+                <li class="p-3 border border-gray-300 rounded-md bg-white flex justify-between items-center shadow-sm w-full">
+                  <%# アイコンを削除 %>
+                  <span class="text-sm font-bold"><%= friend.name %> さん</span>
+                  
+                  <% friendship = current_user.active_friendships.find_by(friend_id: friend.id) || current_user.passive_friendships.find_by(user_id: friend.id) %>
+                  <% if friendship %>
+                    <%= button_to "フレンド解除", friendship_path(friendship), method: :delete, data: { turbo_confirm: "本当にフレンドを解除しますか？" }, class: "text-[#D96F6F] text-xs hover:underline cursor-pointer bg-transparent border-none p-0" %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-sm text-gray-600 pl-4 tracking-wider">まだフレンドがいません。</p>
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
