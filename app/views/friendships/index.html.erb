@@ -1,0 +1,92 @@
+<h1>フレンド管理</h1>
+
+<hr>
+
+<div>
+  <h3>あなたのフレンドコード</h3>
+  <p><strong><%= current_user.friend_code %></strong></p>
+</div>
+
+<hr>
+
+<div>
+  <h3>フレンド検索</h3>
+  <%= form_with url: friendships_path, method: :get, local: true do |f| %>
+    <%= f.text_field :friend_code, placeholder: "フレンドコードを入力", value: params[:friend_code] %>
+    <%= f.submit "検索" %>
+  <% end %>
+
+  <% if @search_result.present? %>
+    <div style="margin-top: 10px; padding: 10px; border: 1px solid #ccc;">
+      <p><%= @search_result.name %> さんが見つかりました！</p>
+      
+      <%= form_with url: friendships_path, method: :post, local: true do |f| %>
+        <%= f.hidden_field :friend_id, value: @search_result.id %>
+        <%= f.submit "フレンド申請する" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<hr>
+
+<div>
+  <h3>届いているフレンド申請</h3>
+  <% if @received_requests.any? %>
+    <ul>
+      <% @received_requests.each do |request| %>
+        <li>
+          <%= request.user.name %> さんから申請が届いています
+          
+          <%= button_to "承認する", friendship_path(request), method: :patch, style: "display:inline;" %>
+          <%= button_to "拒否する", friendship_path(request), method: :delete, data: { turbo_confirm: "本当に拒否しますか？" }, style: "display:inline;" %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>届いている申請はありません。</p>
+  <% end %>
+</div>
+
+<hr>
+
+<div>
+  <h3>送信済みのフレンド申請</h3>
+  <% if @sent_requests.any? %>
+    <ul>
+      <% @sent_requests.each do |request| %>
+        <li>
+          <%= request.friend.name %> さんへ申請中...
+          <%= button_to "申請をキャンセル", friendship_path(request), method: :delete, data: { turbo_confirm: "キャンセルしますか？" } %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>送信済みの申請はありません。</p>
+  <% end %>
+</div>
+
+<hr>
+
+<div>
+  <h3>フレンド一覧</h3>
+  <% if @friends.any? %>
+    <ul>
+      <% @friends.each do |friend| %>
+        <li>
+          <%= friend.name %>
+          
+          <% 
+            # 自分が申請した側か、相手が申請した側かを判定してFriendshipレコードを取得
+            friendship = current_user.active_friendships.find_by(friend_id: friend.id) || current_user.passive_friendships.find_by(user_id: friend.id) 
+          %>
+          <% if friendship %>
+            <%= button_to "フレンド解除", friendship_path(friendship), method: :delete, data: { turbo_confirm: "本当にフレンドを解除しますか？" } %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>まだフレンドがいません。</p>
+  <% end %>
+</div>
