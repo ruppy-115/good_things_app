@@ -32,7 +32,6 @@ class FriendshipsController < ApplicationController
   def update
     # 自分宛ての申請（passive_friendships）を探して承認する
     @friendship = current_user.passive_friendships.find(params[:id])
-    
     if @friendship.update(status: :accepted)
       redirect_to friendships_path, notice: "フレンド申請を承認しました。"
     else
@@ -42,7 +41,6 @@ class FriendshipsController < ApplicationController
 
   def destroy
     @friendship = Friendship.find(params[:id])
-    
     # 念のため、自分に関係するデータかチェックしてから削除
     if @friendship.user == current_user || @friendship.friend == current_user
       @friendship.destroy

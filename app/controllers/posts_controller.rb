@@ -8,9 +8,9 @@ class PostsController < ApplicationController
 
     if params[:filter] == "friends"
       # 1. フレンドのIDリストを取得し、自分のIDも追加する（自分の投稿も見れるようにするため）
-      target_user_ids = current_user.friends.pluck(:id) + [current_user.id]
+      target_user_ids = current_user.friends.pluck(:id) + [ current_user.id ]
       # 2. フレンドと自分の投稿のうち、「公開」または「フレンド限定」のものを取得
-      @posts = base_posts.where(user_id: target_user_ids, status: [:published, :friends_only])
+      @posts = base_posts.where(user_id: target_user_ids, status: [ :published, :friends_only ])
     else
       # published のステータスを取得
       @posts = base_posts.status_published

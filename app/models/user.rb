@@ -9,8 +9,8 @@ class User < ApplicationRecord
   validates :friend_code, presence: true, uniqueness: true
 
   has_many :posts, dependent: :destroy
-  has_many :active_friendships, class_name: 'Friendship', foreign_key: 'user_id', dependent: :destroy
-  has_many :passive_friendships, class_name: 'Friendship', foreign_key: 'friend_id', dependent: :destroy
+  has_many :active_friendships, class_name: "Friendship", foreign_key: "user_id", dependent: :destroy
+  has_many :passive_friendships, class_name: "Friendship", foreign_key: "friend_id", dependent: :destroy
 
   before_validation :generate_friend_code, on: :create
 
@@ -19,7 +19,6 @@ class User < ApplicationRecord
     active_friend_ids = active_friendships.status_accepted.pluck(:friend_id)
     # 相手から申請されて承認したユーザーID
     passive_friend_ids = passive_friendships.status_accepted.pluck(:user_id)
-    
     User.where(id: active_friend_ids + passive_friend_ids)
   end
 
