@@ -1,15 +1,7 @@
-<%# 余白調整: 固定ヘッダー+カレンダーの分(約200px)を確保するため pt-52 に変更 %>
 <div class="min-h-screen bg-[#FDFBF7] pt-41 pb-20">
-
-  <%# ★修正1: Turbo Frame を一番外側に移動（ヘッダーもカレンダーも更新対象にするため） %>
   <%= turbo_frame_tag "main-interface", data: { turbo_action: "advance" } do %>
     
-    <%# ページ全体をフリップ用コントローラーで包む %>
     <div class="w-full" data-controller="notebook-flip">
-
-      <%# ---------------------------------------------------------------- %>
-      <%# ★修正2: ヘッダーとカレンダーをひとつの fixed コンテナにまとめる %>
-      <%# ---------------------------------------------------------------- %>
       <div class="fixed top-0 left-0 w-full z-[10000] bg-[#FDFBF7] shadow-md">
         
         <%# --- A. タイトルエリア (背景色あり) --- %>
@@ -38,7 +30,7 @@
           <div class="flex items-center justify-center space-x-1 px-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
             
             <%# 前の週へ %>
-            <%= link_to posts_path(date: @start_date - 1.week, filter: @filter), class: "text-gray-400 hover:text-gray-600 px-2 py-2" do %>
+            <%= link_to posts_path(date: @start_date - 1.week, filter: params[:filter]), class: "text-gray-400 hover:text-gray-600 px-2 py-2" do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
@@ -47,7 +39,7 @@
             <%# 日付ループ %>
             <% (@start_date..@start_date + 6.days).each do |day| %>
               <% is_active = day == @current_date %>
-              <%= link_to posts_path(date: day, filter: @filter), 
+              <%= link_to posts_path(date: day, filter: params[:filter]), 
                   class: "flex flex-col items-center justify-center w-10 h-14 rounded-full flex-shrink-0 cursor-pointer transition-all duration-200 #{is_active ? 'text-[#AED7BE]' : 'text-gray-600 hover:bg-gray-100'}",
                   data: { action: "click->notebook-flip#flip" } do %>
                   
@@ -63,7 +55,7 @@
             <% end %>
 
             <%# 次の週へ %>
-            <%= link_to posts_path(date: @start_date + 1.week, filter: @filter), class: "text-gray-400 hover:text-gray-600 px-2 py-2" do %>
+            <%= link_to posts_path(date: @start_date + 1.week, filter: params[:filter]), class: "text-gray-400 hover:text-gray-600 px-2 py-2" do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
@@ -71,10 +63,8 @@
           </div>
         </div>
       </div>
-      <%# --- fixedエリア終了 --- %>
 
       <%# --- ノートエリア --- %>
-      <%# 上部は pt-52 で確保済みなので、ここでは余計なマージンを入れない %>
       <div class="px-2 max-w-lg mx-auto relative perspective-1000">
         <div id="notebook-page" class="bg-white rounded-r-lg shadow-lg min-h-[428px] flex relative notebook-grid notebook-page-transition">
           

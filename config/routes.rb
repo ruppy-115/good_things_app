@@ -22,4 +22,6 @@ Rails.application.routes.draw do
   resources :my_posts, only: %i[index]
 
   get "users", to: "users#new"
+
+  resources :friendships, only: %i[index create update destroy]
 end
