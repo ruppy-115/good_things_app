@@ -1,18 +1,59 @@
-<div class="top_wrapper">
-  <div class="top_inner">
-      <h1 class="top_title">良いこと<br class="u-mobile-br">日記</h1>
-      <p class="top_text">今日の良いことを記録するアプリ</p>
-      <p class="top_sub-text">1日の終わりに"良いこと"を振り返りませんか？<br>いつもと同じ1日がきっと特別な日になるでしょう。</p>
-      <div class="top_btn">
-        <div class="m_btn_wrapper">
-          <%= link_to login_path, class: "m_btn" do %>
-            <span class="m_btn-txt">ログイン</span>
-          <% end %>
-        </div>
-        <div class="m_btn_wrapper btn_color">
-          <%= link_to new_user_path, class: "m_btn" do %>
-            <span class="m_btn-txt">新規登録</span>
-          <% end %>
-        </div>
+<div class="top-inner">
+  <div class="top-section">
+    <div class="logo-img-box">
+      <img src="/assets/logo.png" alt="タイトルロゴ" class="logo-img">
+    </div>
+    <p class="concept">今日の良いことを記録するアプリ</p>
   </div>
+
+  <div class="button-section">
+    <%= link_to 'ログイン', login_path, class: 'btn-stitch' %>
+    <%= link_to '新規登録', users_path, class: 'btn-stitch' %>
+  </div>
+
+  <div class="how-section">
+    <p class="how-top">使い方</p>
+    <div class="triangle"></div>
+
+    <div class="desc">
+      <p class="desc-string">①今日の良いことを記録</p>
+      <div class="desc-img-box">
+        <img src="/assets/top_1.jpg" alt="良いことを記録する" class="desc-img">
+      </div>
+      <p class="desc-string-sub">振り返りを通して良いことに目を向けよう</p>
+    </div>
+    <p>&#x21E3;</p>
+    <div class="desc">
+      <p class="desc-string">②世界の良いことを閲覧</p>
+      <div class="desc-img-box">
+        <img src="/assets/top_2.jpg" alt="スマホを見る" class="desc-img">
+      </div>
+      <p class="desc-string-sub">日常に潜む良いことに気づこう</p>
+    </div>
+    <p>&#x21E3;</p>
+    <div class="desc">
+      <p class="desc-string">③自分の良いことを閲覧</p>
+      <div class="desc-img-box">
+        <img src="/assets/top_3.png" alt="手帳を読む" class="desc-img">
+      </div>
+      <p class="desc-string-sub">1日1日の積み重なりを実感しよう</p>
+    </div>
+    <p>&#x21E3;</p>
+    <div class="desc">
+      <p class="desc-string">④その他の機能-フレンド機能</p>
+      <div class="desc-img-box">
+        <img src="/assets/top_4.png" alt="握手" class="desc-img">
+      </div>
+      <p class="desc-string-sub">プライベートな話題はフレンドのみに公開しよう</p>
+    </div>
+    <p>&#x21E3;</p>
+    <div class="desc">
+      <p class="desc-string">⑤その他の機能-リマインド機能</p>
+      <div class="desc-img-box">
+        <img src="/assets/top_5.png" alt="ベル" class="desc-img">
+      </div>
+      <p class="desc-string-sub">忘れないように通知を設定しよう</p>
+    </div>
+  </div>
+  <%= link_to '新規登録', users_path, class: 'btn-stitch' %>
 </div>
