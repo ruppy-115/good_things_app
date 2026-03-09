@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-[#FDFBF7] pt-20 pb-20">
+  <div class="max-w-lg mx-auto px-4">
+    <%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "text-xs text-[#AED7BE] font-bold hover:underline" %>
+    <%= button_to "ログアウト", logout_path, method: :delete, class: "text-xs text-[#AED7BE] font-bold hover:underline bg-transparent border-none cursor-pointer p-0" %>
+    <h1 class="text-xl font-bold text-gray-800 mb-6 tracking-widest text-center">設定・プロフィール</h1>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <h2 class="text-sm font-bold text-gray-600 mb-4 border-b pb-2">ユーザー情報</h2>
+      
+      <div class="mb-4">
+        <p class="text-xs text-gray-500 mb-1">お名前</p>
+        <p class="text-base font-medium text-gray-800"><%= current_user.name %></p>
+      </div>
+
+      <div class="mb-4">
+        <p class="text-xs text-gray-500 mb-1">メールアドレス</p>
+        <p class="text-base font-medium text-gray-800"><%= current_user.email %></p>
+      </div>
+
+      <%# 編集画面へのリンク（後で作ります） %>
+      <div class="text-right">
+        <%= link_to "プロフィールを編集する", edit_profile_path, class: "text-xs text-[#AED7BE] font-bold hover:underline" %>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-sm font-bold text-gray-600 mb-4 border-b pb-2">リマインド設定</h2>
+      
+      <%# ここにリマインド設定のフォームや表示が入ります %>
+      <p class="text-sm text-gray-600">毎日決まった時間に、日記を書くお知らせを受け取ることができます。</p>
+      
+      <div class="mt-4 flex items-center justify-between">
+        <span class="text-base font-medium text-gray-800">通知時間</span>
+        <span class="text-base text-gray-500">未設定</span>
+      </div>
+    </div>
+
+  </div>
+</div>

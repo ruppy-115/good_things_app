@@ -3,84 +3,125 @@ body {
   overflow-x: hidden;
 }
 
-.top_wrapper {
-  min-height: calc(100vh - 80px); 
+.top-inner {
+  background-color: #FAF8F3;
+  color: #333;
+  font-family: sans-serif;
+  padding: 40px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.top-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-img-box {
+  width: 220px;
+  margin: 0 auto 10px;
+}
+
+.logo-img {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: auto;
+  object-fit: contain;
 }
 
-.top_inner {
-  padding: 0 20px;
-  text-align: center;
+.concept {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  letter-spacing: 0.05em;
 }
 
-.top_title {
-  font-size: 70px;
-  font-weight: bold;
-  color: #008db7;
-}
-
-@media screen and (min-width: 960px) {
-  .u-mobile-br {
-    display: none;
-  }
-}
-
-.top_text {
-  margin-top: 56px;
-  font-size: 20px;
-  color: black;
-}
-
-.top_sub-text {
-  margin-top: 24px;
-}
-
-.top_btn {
-  margin-top: 56px;
+.button-section {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
+  margin-bottom: 40px;
 }
 
-.m_btn_wrapper {
-  text-align: center;
-}
-
-.m_btn {
-  font-weight: bold;
-  text-decoration: none;
+.btn-stitch {
   display: inline-block;
-  padding: 10px 10px;
-  border-radius: 15%;
-  color: black;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgb(102, 99, 96);
-  z-index: 0;
+  padding: 0.3em 0.5em;
+  text-decoration: none;
+  background: #F3EBC8;
+  color: #707070;
+  font-weight: bold;
+  border-radius: 4px;
+  box-shadow: 0px 0px 0px 5px #F3EBC8;
+  border: dashed 1px #FFF;
 }
 
-.m_btn::before {
-  content: "";
+.btn-stitch:hover {
+  border: dotted 1px #FFF;
+}
+
+.how-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.how-top {
+  font-weight: bold;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 10px solid #ddd;
+  margin: 0 auto 20px;
+}
+
+.desc {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
   width: 100%;
-  height: 100%;
-  background: rgb(183, 181, 178);
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateX(-100%);
-  transition: transform 0.5s;
-  z-index: -1;
-  pointer-events: none;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
-.m_btn-txt {
-  position: relative;
-  z-index: 1;
+.desc-string {
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+  color: #555;
+  margin: 0 0 15px 0;
 }
 
-.m_btn:hover::before {
-  transform: translateX(0);
+.desc-img-box {
+  margin: 0 auto 15px;
+  text-align: center;
+}
+
+.desc-img {
+  max-height: 80px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.desc-string-sub {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+  text-align: center;
+}
+
+.how-section > p:not(.how-top) {
+  margin: 10px 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.top-inner > .btn-stitch {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
 }

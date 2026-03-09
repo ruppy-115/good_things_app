@@ -24,4 +24,6 @@ Rails.application.routes.draw do
   get "users", to: "users#new"
 
   resources :friendships, only: %i[index create update destroy]
+
+  resource :profile, only: %i[show edit update]
 end
