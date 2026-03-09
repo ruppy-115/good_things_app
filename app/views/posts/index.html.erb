@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[#FDFBF7] pt-41 pb-20">
+<div class="min-h-screen bg-[#FDFBF7] pt-43 pb-20">
   <%= turbo_frame_tag "main-interface", data: { turbo_action: "advance" } do %>
     
     <div class="w-full" data-controller="notebook-flip">
@@ -7,7 +7,9 @@
         <%# --- A. タイトルエリア (背景色あり) --- %>
         <div class="bg-[#AED7BE] pt-4">
           <div class="flex justify-center items-center mb-2">
-            <span class="text-gray-700 font-bold text-lg">プラス日記</span>
+            <%= link_to new_post_path, class: "transition-all duration-200 hover:opacity-80 active:scale-95", data: { turbo_frame: "_top" } do %>
+              <%= image_tag "logo.png", alt: "ぽかぽか日記", class: "h-10 w-auto object-contain" %>
+            <% end %>
           </div>
 
           <%# --- B. タブ切り替え --- %>

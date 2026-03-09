@@ -1,14 +1,114 @@
-<div class="my-16">
-    <div class="w-10/12 mx-auto">
-        <h1 class="text-3xl font-bold text-center">自分の記録一覧</h1>
+<div class="min-h-screen bg-[#FDFBF7] pt-43 pb-20">
+  <%= turbo_frame_tag "main-interface", data: { turbo_action: "advance" } do %>
+    
+    <div class="w-full" data-controller="notebook-flip">
+      <div class="fixed top-0 left-0 w-full z-[10000] bg-[#FDFBF7] shadow-md">
         
-        <% if @posts.present? %>
-            <div class="flex flex-col mt-12">
-                <%= render @posts %>
+        <%# --- A. タイトルエリア (タブを削除してシンプルに) --- %>
+        <div class="bg-[#AED7BE] pt-4">
+          <%# --- アプリタイトル --- %>
+          <div class="flex justify-center items-center mb-2">
+            <%= link_to new_post_path, class: "transition-all duration-200 hover:opacity-80 active:scale-95", data: { turbo_frame: "_top" } do %>
+              <%= image_tag "logo.png", alt: "ぽかぽか日記", class: "h-10 w-auto object-contain" %>
+            <% end %>
+          </div>
+
+          <%# --- 文字の幅に合わせた下線 --- %>
+          <div class="flex justify-center w-full px-4 text-sm font-bold text-gray-700">
+            <span class="inline-block px-8 pb-2 border-b-4 text-center border-[#FDFBF7]">
+              自分の記録
+            </span>
+          </div>
+        </div>
+
+        <%# --- C. カレンダーエリア (6ヶ月毎の表示) --- %>
+        <div class="bg-[#F2F0E9] pt-2 pb-0 border-b border-gray-200">
+          <div class="flex items-center justify-center space-x-1 px-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+            
+            <%# 前の6ヶ月へ %>
+            <%= link_to my_posts_path(date: @start_date - 6.months), 
+                class: "text-gray-400 hover:text-gray-600 px-2 py-2",
+                data: { action: "click->notebook-flip#flip" } do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            <% end %>
+
+            <%# 6ヶ月ループ (@start_dateから6ヶ月分表示) %>
+            <% (0..5).each do |offset| %>
+              <% target_date = @start_date + offset.months %>
+              <% is_active = (target_date.year == @current_date.year && target_date.month == @current_date.month) %>
+              
+              <%= link_to my_posts_path(date: target_date), 
+                  class: "flex flex-col items-center justify-center w-12 h-14 rounded-full flex-shrink-0 cursor-pointer transition-all duration-200 #{is_active ? 'text-[#AED7BE]' : 'text-gray-600 hover:bg-gray-100'}",
+                  data: { action: "click->notebook-flip#flip" } do %>
+                  
+                <%# 年を表示 %>
+                <span class="text-[10px] font-bold mb-1"><%= target_date.year %></span>
+                <%# 月を表示 %>
+                <span class="text-base font-bold <%= is_active ? 'scale-110' : '' %>"><%= target_date.month %>月</span>
+                
+                <% if is_active %>
+                  <div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[8px] border-b-[#AED7BE] mt-1"></div>
+                <% else %>
+                  <div class="h-[9px] w-1"></div>
+                <% end %>
+              <% end %>
+            <% end %>
+
+            <%# 次の6ヶ月へ %>
+            <%= link_to my_posts_path(date: @start_date + 6.months), 
+                class: "text-gray-400 hover:text-gray-600 px-2 py-2",
+                data: { action: "click->notebook-flip#flip" } do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            <% end %>
+          </div>
+        </div>
+      </div> <%# ★ 先ほどはこの「fixed要素の閉じタグ」が抜けていました！ %>
+
+      <%# --- ノートエリア --- %>
+      <div class="px-2 max-w-lg mx-auto relative perspective-1000">
+        <div id="notebook-page" class="bg-white rounded-r-lg shadow-lg min-h-[428px] flex relative notebook-grid notebook-page-transition">
+          
+          <%# リング部分 %>
+          <div class="w-12 flex-shrink-0 relative border-r border-gray-200">
+            <div class="flex flex-col items-center space-y-6 pt-8 h-full">
+              <% 9.times do %>
+                <div class="relative w-full flex justify-center">
+                  <div class="w-4 h-4 bg-gray-300 rounded-full shadow-inner"></div>
+                  <div class="absolute -left-3 top-1 w-8 h-2 bg-gray-400 rounded-full border border-gray-500 transform -rotate-12 shadow-md z-10"></div>
+                </div>
+              <% end %>
             </div>
-        <% else %>
-            <div class="mb-3">記録がありません</div>
-        <% end %>
-        <%= link_to '記録作成', new_post_path, class: "!no-underline w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#008db7] hover:bg-[#00769a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer transition duration-150" %>
+          </div>
+
+          <%# 投稿リストエリア %>
+          <div class="flex-grow p-4 pt-8">
+            <% if @posts.present? %>
+              <div class="flex flex-col space-y-4">
+                <%= render @posts %>
+              </div>
+            <% else %>
+              <div class="flex flex-col items-center justify-center h-64 text-gray-400">
+                <p class="text-lg mb-2 font-medium">記録がありません</p>
+                <p class="text-sm"><%= @current_date.strftime('%Y年%-m月') %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# --- 書くボタン (Frame内に入れて日付情報を保持させる) --- %>
+      <%= link_to new_post_path, 
+        class: "fixed bottom-20 right-6 w-16 h-16 bg-[#F2ECD9] rounded-full border-2 border-gray-700 flex items-center justify-center shadow-lg hover:bg-[#e6dfc5] transition active:scale-95 z-[10001]", 
+        data: { turbo_frame: "_top" } do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      <% end %>
+
     </div>
+  <% end %> <%# --- Turbo Frame End --- %>
 </div>
