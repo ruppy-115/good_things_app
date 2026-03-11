@@ -1,7 +1,7 @@
 <header class="header">
   <div class="header__inner">
     <%= link_to root_path, class: "header-logo_link" do %>
-      <img src="/assets/logo.png" alt="タイトルロゴ" class="logo-img">
+      <%= image_tag "logo.png", alt: "タイトルロゴ", class: "logo-img" %>
     <% end %>
 
     <nav class="header__nav nav" id="js-nav">
