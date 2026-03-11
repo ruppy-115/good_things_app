@@ -6,14 +6,12 @@
         
         <%# --- A. タイトルエリア (タブを削除してシンプルに) --- %>
         <div class="bg-[#AED7BE] pt-4">
-          <%# --- アプリタイトル --- %>
           <div class="flex justify-center items-center mb-2">
             <%= link_to new_post_path, class: "transition-all duration-200 hover:opacity-80 active:scale-95", data: { turbo_frame: "_top" } do %>
               <%= image_tag "logo.png", alt: "ぽかぽか日記", class: "h-10 w-auto object-contain" %>
             <% end %>
           </div>
 
-          <%# --- 文字の幅に合わせた下線 --- %>
           <div class="flex justify-center w-full px-4 text-sm font-bold text-gray-700">
             <span class="inline-block px-8 pb-2 border-b-4 text-center border-[#FDFBF7]">
               自分の記録
@@ -66,7 +64,7 @@
             <% end %>
           </div>
         </div>
-      </div> <%# ★ 先ほどはこの「fixed要素の閉じタグ」が抜けていました！ %>
+      </div>
 
       <%# --- ノートエリア --- %>
       <div class="px-2 max-w-lg mx-auto relative perspective-1000">

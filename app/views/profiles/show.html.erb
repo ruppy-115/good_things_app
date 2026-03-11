@@ -37,6 +37,6 @@
       </div>
     </div>
 
-    <%= link_to "ログアウト", logout_path, data: { turbo_method: :delete }, class: "block mt-4 text-sm text-[#AED7BE] font-bold hover:underline text-center" %>
+    <%= button_to "ログアウト", logout_path, method: :delete, form_class: "block mt-4 w-full text-center", data: { turbo: false }, class: "text-sm text-[#AED7BE] font-bold hover:underline bg-transparent border-none cursor-pointer p-0" %>
   </div>
 </div>
