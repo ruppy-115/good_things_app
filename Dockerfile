@@ -1,11 +1,32 @@
 # syntax = docker/dockerfile:1
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t my-app .
-# docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
-
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.3.6
+
+# === Development stage ===
+FROM docker.io/library/ruby:$RUBY_VERSION AS development
+
+ENV LANG=C.UTF-8
+ENV TZ=Asia/Tokyo
+
+RUN apt-get update -qq \
+    && apt-get install -y ca-certificates curl gnupg build-essential libpq-dev vim \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && NODE_MAJOR=20 \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update -qq && apt-get install -y nodejs \
+    && npm install -g yarn \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+RUN mkdir /myapp
+WORKDIR /myapp
+RUN gem install bundler
+COPY . /myapp
+
+# === Production base stage ===
+# docker build -t my-app .
+# docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
