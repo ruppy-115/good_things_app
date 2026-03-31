@@ -33,9 +33,13 @@
         <div class="flex items-center justify-between">
           <span class="text-base font-medium text-gray-800">通知時間</span>
           <div class="flex items-center gap-2">
-            <%# 時間入力フィールド %>
-            <%= f.time_field :remind_time, 
-                class: "rounded-md border-gray-300 text-gray-700 focus:ring-[#AED7BE] focus:border-[#AED7BE] p-1" %>
+            <%# 30分刻みの選択肢を生成（00:00, 00:30, ... 23:30） %>
+            <% time_options = (0..23).flat_map { |h| ["#{format('%02d', h)}:00", "#{format('%02d', h)}:30"] } %>
+
+            <%= f.select :remind_time, 
+                options_for_select(time_options, f.object.remind_time&.strftime('%H:%M')), 
+                {}, 
+                class: "rounded-md border-gray-300 text-gray-700 focus:ring-[#AED7BE] focus:border-[#AED7BE] py-1 px-2 cursor-pointer bg-white" %>
             
             <%# ON/OFF 切り替え %>
             <label class="relative inline-flex items-center cursor-pointer">
