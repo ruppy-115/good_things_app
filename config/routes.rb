@@ -26,4 +26,9 @@ Rails.application.routes.draw do
   resources :friendships, only: %i[index create update destroy]
 
   resource :profile, only: %i[show edit update]
+
+  resource :reminder, only: [] do
+    post "/", to: "reminders#create_or_update", as: :create_or_update
+    patch "/", to: "reminders#create_or_update"
+  end
 end

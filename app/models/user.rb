@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :active_friendships, class_name: "Friendship", foreign_key: "user_id", dependent: :destroy
   has_many :passive_friendships, class_name: "Friendship", foreign_key: "friend_id", dependent: :destroy
+  has_one :reminder, dependent: :destroy
 
   before_validation :generate_friend_code, on: :create
 
