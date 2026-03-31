@@ -1,11 +1,11 @@
-<div class="bg-[#AED7BE] pt-4 pb-2">
+<div class="fixed top-0 left-0 w-full z-10 bg-[#AED7BE] pt-4 pb-2 shadow-sm">
   <div class="flex justify-center items-center mb-2">
     <%= link_to new_post_path, class: "transition-all duration-200 hover:opacity-80 active:scale-95", data: { turbo_frame: "_top" } do %>
       <%= image_tag "logo.png", alt: "ぽかぽか日記", class: "h-10 w-auto object-contain" %>
     <% end %>
   </div>
 </div>
-<div class="bg-[#FDFBF7] pt-5 pb-5">
+<div class="bg-[#FDFBF7] pt-3 pb-24 mt-20">
   <div class="max-w-lg mx-auto px-4">
     <h1 class="text-xl font-bold text-[#707070] mb-5 tracking-widest w-fit bg-gradient-to-t from-[#F3EBC8] from-40% to-transparent to-40%">設定・プロフィール</h1>
 
@@ -21,20 +21,35 @@
         <p class="text-xs text-gray-500 mb-1">メールアドレス</p>
         <p class="text-base font-medium text-gray-800"><%= current_user.email %></p>
       </div>
-
-      <div class="text-right">
-        <%= link_to "プロフィールを編集する", edit_profile_path, class: "text-xs text-[#AED7BE] font-bold hover:underline" %>
-      </div>
     </div>
 
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
       <h2 class="text-sm font-bold text-gray-600 mb-4 border-b pb-2">リマインド設定</h2>
-      <p class="text-sm text-gray-600">毎日決まった時間に、日記を書くお知らせを受け取ることができます。</p>
+      <p class="text-sm text-gray-600 mb-6">毎日決まった時間に、日記を書くお知らせを受け取ることができます。</p>
       
-      <div class="mt-4 flex items-center justify-between">
-        <span class="text-base font-medium text-gray-800">通知時間</span>
-        <span class="text-base text-gray-500">未設定</span>
-      </div>
+      <% reminder = current_user.reminder || current_user.build_reminder %>
+
+      <%= form_with model: reminder, url: reminder_path, local: true, class: "space-y-4" do |f| %>
+        <div class="flex items-center justify-between">
+          <span class="text-base font-medium text-gray-800">通知時間</span>
+          <div class="flex items-center gap-2">
+            <%# 時間入力フィールド %>
+            <%= f.time_field :remind_time, 
+                class: "rounded-md border-gray-300 text-gray-700 focus:ring-[#AED7BE] focus:border-[#AED7BE] p-1" %>
+            
+            <%# ON/OFF 切り替え %>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <%= f.check_box :is_enabled, class: "sr-only peer" %>
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#AED7BE]"></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="text-right pt-2">
+          <%= f.submit "設定を保存する", 
+              class: "bg-[#AED7BE] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:opacity-90 cursor-pointer transition-all" %>
+        </div>
+      <% end %>
     </div>
 
     <%= button_to "ログアウト", logout_path, method: :delete, form_class: "block mt-4 w-full text-center", data: { turbo: false }, class: "text-sm text-[#AED7BE] font-bold hover:underline bg-transparent border-none cursor-pointer p-0" %>
